@@ -1,13 +1,13 @@
 # M5 ENV Monitor
 
-`M5 ENV Monitor` measures and displays the environmental parameters:
+`M5 ENV Monitor` measures and displays the environmental variables:
 
 - Temperature
 - Humidity
-- Pressure
+- Barometric pressure
 - CO2
 
-These parameters can be sent to Ambient of data visualization service, then displayed in charts.
+<img src="https://shoarai.com/blog/wp-content/uploads/2021/10/M5EnvMonitor-scaled.jpg" width="320px" alt="M5 ENV Monitor screen">
 
 ## Device and Sensors
 
@@ -15,9 +15,10 @@ These parameters can be sent to Ambient of data visualization service, then disp
 - ENV II
 - MHZ-19c
 
-## Cloud Service
+## Service Account(Optional)
 
-- Ambient
+- [Ambient](https://ambidata.io/)
+  - The environmental variables can be sent to Ambient of data visualization service, then displayed in charts.
 
 ## Setup
 
