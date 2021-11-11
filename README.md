@@ -39,3 +39,7 @@
 ## License
 
 MIT License
+
+## Blog
+
+[shoarai.com](https://shoarai.com/2021/10/31/m5env-monitor/)
