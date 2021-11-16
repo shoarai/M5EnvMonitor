@@ -15,10 +15,21 @@
 - ENV II
 - MHZ-19c
 
+## Connections
+
+M5StickC Plus --(Grove Cable)-- ENV II 
+
+| M5StickC Plus Pin | MH-Z19C Pin |
+| --- | --- |
+| GND | GND |
+| 5V→ | VIN |
+| G26 | Rx |
+| G36 | Tx |
+
 ## Service Account(Optional)
 
-- [Ambient](https://ambidata.io/)
-  - The environmental variables can be sent to Ambient of data visualization service, then displayed in charts.
+[Ambient](https://ambidata.io/)  
+The environmental variables can be sent to Ambient of data visualization service, then displayed in charts.
 
 ## Setup
 
