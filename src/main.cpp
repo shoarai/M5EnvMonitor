@@ -40,6 +40,7 @@ int count = 0;
 void initEnv()
 {
   Serial.println(F("ENV Unit(SHT30 and BMP280) test..."));
+  M5.Lcd.println(F("ENV Unit test..."));
 
   while (!bme.begin(0x76))
   {
@@ -68,6 +69,7 @@ void setup()
   mhz19.setAutoCalibration(false);
 
   // Connect to WiFi
+  M5.Lcd.println("WiFi connecting...");
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED)
   {
