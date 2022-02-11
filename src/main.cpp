@@ -150,8 +150,14 @@ void loop()
   M5.Lcd.printf("    %4.1f 'C\r\n", tmp);
   M5.Lcd.printf("    %4.1f %%\r\n", hum);
   M5.Lcd.printf("  %6.1f hPa\r\n", pressure);
-  M5.Lcd.printf("  %4d   ppm\r\n", co2ppm);
-
+  if (co2ppm == -1)
+  {
+    M5.Lcd.printf("    %4s ppm\r\n", "N/A");
+  }
+  else
+  {
+    M5.Lcd.printf("  %4d   ppm\r\n", co2ppm);
+  }
   // Alert
   if (tmp <= 17 || tmp >= 28 ||
       hum <= 40 || hum >= 60)
