@@ -40,13 +40,21 @@ int count = 0;
 void initEnv()
 {
   Serial.println(F("ENV Unit(SHT30 and BMP280) test..."));
-  M5.Lcd.println(F("ENV Unit test..."));
+  M5.Lcd.printf("ENV Unit test...");
 
   while (!bme.begin(0x76))
   {
     Serial.println("Could not find a valid BMP280 sensor, check wiring!");
-    M5.Lcd.println("Could not find a valid BMP280 sensor, check wiring!");
+    if (M5.BtnA.wasPressed())
+    {
+      M5.update();
+      break;
+    }
+    M5.update();
+    delay(1000);
+    M5.Lcd.printf(".");
   }
+  M5.Lcd.println();
 }
 
 void setup()
@@ -69,12 +77,20 @@ void setup()
   mhz19.setAutoCalibration(false);
 
   // Connect to WiFi
-  M5.Lcd.println("WiFi connecting...");
+  M5.Lcd.printf("WiFi connect...");
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED)
   {
-    delay(100);
+    if (M5.BtnA.wasPressed())
+    {
+      M5.update();
+      break;
+    }
+    M5.update();
+    delay(1000);
+    M5.Lcd.printf(".");
   }
+  M5.Lcd.println();
   M5.Lcd.println("WiFi connected.");
 
   ambient.begin(channelId, writeKey, &client);
@@ -82,6 +98,13 @@ void setup()
 
   setCpuFrequencyMhz(80);
 }
+
+// uint8_t wasBtnAPressedWithUpdate()
+// {
+//   uint8_t wasPressed = M5.BtnA.wasPressed();
+//   M5.update();
+//   return wasPressed;
+// }
 
 const float MAX_BATTERY_VOLTAGE = 4.2f;
 const float MIN_BATTERY_VOLTAGE = 3.0f;
