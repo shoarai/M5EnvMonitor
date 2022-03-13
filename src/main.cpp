@@ -5,7 +5,7 @@
 #include <Adafruit_BMP280.h>
 #include "SHT3X.h"
 
-#include <MHZ19_uart.h>
+#include "MHZ19_uart.h"
 
 #include "Ambient.h"
 
@@ -37,6 +37,22 @@ float pressure = 0.0;
 bool sendResult = false;
 int count = 0;
 
+// uint8_t wasBtnAPressedWithUpdate()
+// {
+//   uint8_t wasPressed = M5.BtnA.wasPressed();
+//   M5.update();
+//   return wasPressed;
+// }
+
+void setLcdRotationByAttitude()
+{
+  float pitch, roll, yaw;
+  M5.IMU.getAhrsData(&pitch, &roll, &yaw);
+  int rotation = (pitch < 0) ? 1 : 3;
+
+  M5.Lcd.setRotation(rotation);
+}
+
 void initEnv()
 {
   Serial.println(F("ENV Unit(SHT30 and BMP280) test..."));
@@ -66,15 +82,21 @@ void setup()
   gpio_pulldown_dis(GPIO_NUM_25);
   gpio_pullup_dis(GPIO_NUM_25);
 
+  // Init M5StickC Plus LCD
   M5.Axp.ScreenBreath(9);
-  M5.Lcd.setRotation(3);
   M5.Lcd.setTextSize(2);
+  setLcdRotationByAttitude();
 
+  // Init serial
+  Serial.begin(9600);
+
+  // Init ENV II
   initEnv();
 
-  Serial.begin(9600);
+  // Init MH-Z19C
   mhz19.begin(rxPin, txPin);
   mhz19.setAutoCalibration(false);
+  M5.Lcd.println("MH-Z19 is warming up now.");
 
   // Connect to WiFi
   M5.Lcd.printf("WiFi connect...");
@@ -94,17 +116,9 @@ void setup()
   M5.Lcd.println("WiFi connected.");
 
   ambient.begin(channelId, writeKey, &client);
-  M5.Lcd.println("MH-Z19 is warming up now.");
 
   setCpuFrequencyMhz(80);
 }
-
-// uint8_t wasBtnAPressedWithUpdate()
-// {
-//   uint8_t wasPressed = M5.BtnA.wasPressed();
-//   M5.update();
-//   return wasPressed;
-// }
 
 const float MAX_BATTERY_VOLTAGE = 4.2f;
 const float MIN_BATTERY_VOLTAGE = 3.0f;
@@ -114,15 +128,6 @@ int calcBatteryPercent()
   float vbat = M5.Axp.GetBatVoltage();
   float percent = (vbat - MIN_BATTERY_VOLTAGE) / (MAX_BATTERY_VOLTAGE - MIN_BATTERY_VOLTAGE);
   return roundf(percent * 100.0f);
-}
-
-void setLcdRotationByAttitude()
-{
-  float pitch, roll, yaw;
-  M5.IMU.getAhrsData(&pitch, &roll, &yaw);
-  int rotation = (pitch < 0) ? 1 : 3;
-
-  M5.Lcd.setRotation(rotation);
 }
 
 void setLcdRotationVerticalByAttitude()
@@ -142,7 +147,7 @@ void loop()
     tmp = sht30.cTemp;
     hum = sht30.humidity;
   }
-  Serial.printf("ENVII Temperature:%2.2f*C, Humidity:%0.2f%%, Pressure:%0.2fPa\r\n", tmp, hum, pressure);
+  Serial.printf("ENV II Temperature: %2.2f*C, Humidity: %0.2f%%, Pressure: %0.2fPa\r\n", tmp, hum, pressure);
 
   float ibat = M5.Axp.GetBatCurrent();
   int battery = calcBatteryPercent();
